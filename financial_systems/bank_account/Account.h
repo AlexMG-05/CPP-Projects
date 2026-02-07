@@ -19,7 +19,7 @@ class BankAccount{
 
     //Read-only
     double get_balance() const;
-    double display_info() const;
+    void display_info() const;
 };
 
 #endif // ACCOUNT_H
