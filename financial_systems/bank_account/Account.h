@@ -5,21 +5,20 @@
 //CLASS DECLARATION
 class BankAccount{
 
-    private:
+    protected:
     std::string account_holder;
     std::string account_number;
     double balance;
 
     public:
-    //Constructor
     BankAccount(std::string name, std::string acc_num, double initial_deposit);
 
-    void deposit(double amount);
-    bool withdraw(double amount); //T = successful, F = insufficient funds
+    virtual void deposit(double amount);
+    virtual bool withdraw(double amount); //T = successful, F = insufficient funds
+    virtual void display_info() const;
+    virtual ~BankAccount() {}
 
-    //Read-only
     double get_balance() const;
-    void display_info() const;
 };
 
 #endif // ACCOUNT_H
