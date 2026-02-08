@@ -1,5 +1,6 @@
 #include "Account.h"
 #include <iostream>
+#include <iomanip>
 
 BankAccount::BankAccount(std::string name, std::string acc_num, double initial_deposit){
     account_holder = name;
@@ -15,7 +16,7 @@ BankAccount::BankAccount(std::string name, std::string acc_num, double initial_d
 void BankAccount::deposit(double amount){
     if(amount > 0){
         balance += amount;
-        std::cout << "Success: Deposited " << amount << " EUR. \n";
+        std::cout << "Success: Deposited " << std::fixed << std::setprecision(2) << amount << " EUR. \n";
     } else {
         std::cout << "Error: Deposit amount must be positive. \n";
     }
@@ -28,12 +29,12 @@ bool BankAccount::withdraw(double amount){
     }
 
     if (amount > balance) {
-        std::cout << "Failure: Insufficient funds. Balance is " << balance << " EUR. \n";
+        std::cout << "Failure: Insufficient funds. Balance is " << std::fixed << std::setprecision(2) << balance << " EUR. \n";
         return false;
     }
 
     balance -= amount;
-    std::cout << "Success: Withdrew " << amount << " EUR. \n";
+    std::cout << "Success: Withdrew " << std::fixed << std::setprecision(2) << amount << " EUR. \n";
     return true;
 }
 
@@ -45,6 +46,6 @@ void BankAccount::display_info() const{
     std::cout << "--------------------------------\n";
     std::cout << "Account: " << account_number << "\n";
     std::cout << "Holder: " << account_holder << "\n";
-    std::cout << "Balance: " << balance << " EUR\n";
+    std::cout << "Balance: " << std::fixed << std::setprecision(2) << balance << " EUR\n";
     std::cout << "--------------------------------\n";
 }
