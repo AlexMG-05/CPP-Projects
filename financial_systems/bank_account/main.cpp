@@ -37,6 +37,24 @@ int get_valid_int() {
     }
 }
 
+double get_valid_double() {
+    double value;
+    while (true) {
+        if(std::cin >> value) {
+            if(value >= 0) {
+                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+                return value;
+            } else {
+                std::cout << "Amount cannot be negative. Try Again: ";
+            }
+        } else {
+            std::cout << "Invalid input. Please enter a valid amount (e.g. 1000.50): ";
+            std::cin.clear();
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        }
+    }
+}
+
 int main() {
     std::string name_input;
     std::string acc_num_input;
@@ -47,12 +65,20 @@ int main() {
     //1. CREATE ACCOUNT
     std::cout << "Enter account's holder name: ";
     std::getline(std::cin, name_input);
+    while(name_input.empty()){
+        std::cout << "Name cannot be empty. Enter name: ";
+        std::getline(std::cin, name_input);
+    }
 
     std::cout << "Enter base account number (e.g ES-1234): ";
     std::cin >> acc_num_input;
+    while(acc_num_input.empty()){
+        std::cout << "Account Number cannot be empty. Enter Number: ";
+        std::cin >> acc_num_input;
+    }
 
     std::cout << "Enter initial deposit (Shared split 50/50 with Savings Account): ";
-    std::cin >> initial_dep;
+    initial_dep = get_valid_double();
 
     BankAccount checking(name_input, acc_num_input + "-CHK", initial_dep / 2);
     SavingsAccount savings(name_input, acc_num_input + "-SAV", initial_dep / 2, 0.05); //Assign a 5% interet

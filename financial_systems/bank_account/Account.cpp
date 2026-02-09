@@ -3,13 +3,25 @@
 #include <iomanip>
 
 BankAccount::BankAccount(std::string name, std::string acc_num, double initial_deposit){
-    account_holder = name;
-    account_number = acc_num;
-    
-    if(initial_deposit >= 0){
-        balance = initial_deposit;
+    if(name.empty()){
+        std::cerr << "CRITICAL ERROR: Account created without a name! Defaulting to 'Unknown'.\n";
+        account_holder = "Unknown";
     } else {
-        balance = 0;
+        account_holder = name;
+    }
+
+    if(acc_num.empty()){
+        std::cerr << "CRITICAL ERROR: Account created without a number! Defaulting to '0000'.\n";
+        account_number = "0000";
+    } else {
+        account_holder = acc_num;
+    }
+    
+    if(initial_deposit < 0){
+        std::cerr << "CRITICAL ERROR: Negative initial deposit! Setting to 0.0 EUR\n";
+        balance = 0.0;
+    } else {
+        balance = initial_deposit;
     }
 }
 
