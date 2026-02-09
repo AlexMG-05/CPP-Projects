@@ -47,5 +47,6 @@ void BankAccount::display_info() const{
     std::cout << "Account: " << account_number << "\n";
     std::cout << "Holder: " << account_holder << "\n";
     std::cout << "Balance: " << std::fixed << std::setprecision(2) << balance << " EUR\n";
+    std::cout << "Account Type: Checking\n";
     std::cout << "--------------------------------\n";
 }
