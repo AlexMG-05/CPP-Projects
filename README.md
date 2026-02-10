@@ -16,5 +16,5 @@ A high-performance simulation of banking systems and financial algorithms, devel
 ## How to Run
 1.  Clone the repository.
 2.  Navigate to `financial_systems/bank_account`.
-3.  Compile: `g++ -static main.cpp Account.cpp SavingsAccount.cpp -o bank_app`
-4.  Run: `./bank_app`
+3.  Compile: `g++ -static main.cpp Account.cpp SavingsAccount.cpp Utils.cpp -o bank_app.exe`
+4.  Run: `./bank_app.exe`

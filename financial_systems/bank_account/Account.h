@@ -19,6 +19,7 @@ class BankAccount{
     virtual ~BankAccount() {}
 
     double get_balance() const;
+    std::string get_account_number () const;
 };
 
 #endif // ACCOUNT_H

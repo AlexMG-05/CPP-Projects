@@ -54,6 +54,10 @@ double BankAccount::get_balance() const{
     return balance;
 }
 
+std::string BankAccount::get_account_number() const{
+    return account_number;
+}
+
 void BankAccount::display_info() const{
     std::cout << "--------------------------------\n";
     std::cout << "Account: " << account_number << "\n";
