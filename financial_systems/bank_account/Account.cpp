@@ -14,7 +14,7 @@ BankAccount::BankAccount(std::string name, std::string acc_num, double initial_d
         std::cerr << "CRITICAL ERROR: Account created without a number! Defaulting to '0000'.\n";
         account_number = "0000";
     } else {
-        account_holder = acc_num;
+        account_number= acc_num;
     }
     
     if(initial_deposit < 0){

@@ -1,117 +1,131 @@
 #include "Account.h"
-#include "SavingsAccount.h"
+#include "Bank.h"
 #include "Utils.h"
 #include <iostream>
 #include <limits>
 
 void show_main_menu() {
-    std::cout << "\n=== ACCOUNT SELECTION ===\n";
-    std::cout << "[1] Checking Account\n";
-    std::cout << "[2] Savings Account\n";
-    std::cout << "Press any other key to exit\n";
+    std::cout << "\n=== ISTAR BANK MANAGEMENT SYSTEM ===\n";
+    std::cout << "[1] Open New Account\n";
+    std::cout << "[2] Manage Existing Account\n";
+    std::cout << "[3] Show Bank Portfolio\n";
+    std::cout << "Press any other number to exit\n";
     std::cout << "Select option: ";
 }
 
 void show_action_menu() {
     std::cout << "\n --- ACTION MENU --- \n";
-    std::cout << "[0] Deposit\n";
-    std::cout << "[1] Withdraw\n";
-    std::cout << "[2] Check balance\n";
+    std::cout << "[1] Deposit\n";
+    std::cout << "[2] Withdraw\n";
     std::cout << "[3] Check account information\n";
+    std::cout << "[4] Delete account\n";
     std::cout << "Press any other number to exit\n";
     std::cout << "Select operation: ";
 }
 
 int main() {
-    std::string name_input;
-    std::string acc_num_input;
-    double initial_dep;
-    
-    std::cout << "=== WELCOME TO CREDIT ISTAR BANK ===\n";
+    Bank istar_bank;
+    std::cout << "System initialized. Ready for customers.\n";
 
-    //1. CREATE ACCOUNT
-    std::cout << "Enter account's holder name: ";
-    std::getline(std::cin, name_input);
-    while(name_input.empty()){
-        std::cout << "Name cannot be empty. Enter name: ";
-        std::getline(std::cin, name_input);
-    }
-
-    std::cout << "Enter base account number (e.g ES-1234): ";
-    std::cin >> acc_num_input;
-    while(acc_num_input.empty()){
-        std::cout << "Account Number cannot be empty. Enter Number: ";
-        std::cin >> acc_num_input;
-    }
-
-    std::cout << "Enter initial deposit (Shared split 50/50 with Savings Account): ";
-    initial_dep = get_valid_double();
-
-    BankAccount checking(name_input, acc_num_input + "-CHK", initial_dep / 2);
-    SavingsAccount savings(name_input, acc_num_input + "-SAV", initial_dep / 2, 0.05); //Assign a 5% interet
-
-    std::cout << "\nSUCCESS: Bundle created for " << name_input << ".\n";
-
-    //2. LOOP
     bool app_running = true;
-
-    while(app_running) {
+    while (app_running){
         show_main_menu();
-        int main_choice;
-        if(!(std::cin >> main_choice)) break;
+        int choice = get_valid_int();
 
-        //Pointer to the Parent Class
-        //This pointer can hold the address of either a Checking or a Savings object
-        BankAccount* active_account = nullptr;
+        switch (choice) {
+            case 1:
+            {
+                std::cout << "\n--- NEW CUSTOMER ---\n";
+                std::cout << "Enter Name: ";
+                std::string name;
+                std::getline(std::cin >> std::ws, name);
 
-        if(main_choice == 1){
-            active_account = &checking; //Point to Checking
-            std::cout << "-> Switched to CHECKING Account.\n";
-        } else if (main_choice == 2){
-            active_account = &savings; //Point to Savings
-            std::cout << "-> Switched to SAVINGS Account.\n";
-        } else {
-            std::cout << "Exiting banking system... \n";
-            break;
-        }
+                std::cout << "Enter Base ID (e.g. ES-123): ";
+                std::string id;
+                std::cin >> id;
 
-        bool sub_menu = true;
-        while(sub_menu) {
-            show_action_menu();
-            int sub_choice = get_valid_int();
+                std::cout << "Initial Deposit: ";
+                double amount = get_valid_double();
 
-            double amount = 0.0;
-            switch(sub_choice){
-                case 0: //Deposit
-                    std::cout << "Amount to DEPOSIT: ";
-                    std::cin >> amount;
-                    active_account->deposit(amount);
-                    break;
+                std::cout << "Choose type: [1] Checking, [2] Savings, [3] BUNDLE (amount to be split): ";
+                int type_choice = get_valid_int();
 
-                case 1: //Withdraw
-                    std::cout << "Amount to WITHDRAW: ";
-                    std::cin >> amount;
-                    active_account->withdraw(amount);
-                    break;
+                if(type_choice == 1) {
+                    istar_bank.add_account(name, id + "-C", amount, "checking");
+                } else if(type_choice == 2) {
+                    istar_bank.add_account(name, id + "-S", amount, "savings");
+                } else if (type_choice == 3) {
+                    istar_bank.add_account(name, id + "-C", amount/2, "checking");
+                    istar_bank.add_account(name, id + "-S", amount/2, "savings");
+                    std::cout << "Bundle created successfully!\n";
+                }
+                break;
+            }
 
-                case 2: //Check balance
-                    std::cout << "Account's balance: " << active_account->get_balance() << " EUR.\n";
-                    break;
-                
-                case 3: //Account's info
-                    active_account->display_info();
-                    break;
-                
-                default: //Back
-                    sub_menu = false;
-                    break;
+            case 2:
+            {
+                std::cout << "Enter Account ID to manage: ";
+                std::string target_id;
+                std::cin >> target_id;
+
+                BankAccount* active_account = istar_bank.find_account(target_id);
+
+                if (active_account != nullptr) {
+                    std::cout << "Accessing Account: " << target_id << "...\n";
+
+                    bool in_account = true;
+                    while (in_account) {
+                        show_action_menu();
+                        int op = get_valid_int();
+
+                        switch (op) {
+                            case 1:
+                                std::cout << "Amount: ";
+                                active_account->deposit(get_valid_double());
+                                break;
+                            case 2:
+                                std::cout << "Amount: ";
+                                active_account->withdraw(get_valid_double());
+                                break;
+                            case 3:
+                                active_account->display_info();
+                                break;
+                            case 4:
+                            {
+                                std::cout << "Are you sure? This cannot be undone. (1 = Yes, 2 = No): ";
+                                int confirm = get_valid_int();
+                                if (confirm == 1) {
+                                    istar_bank.close_account(active_account->get_account_number());
+                                    in_account = false;
+                                }
+                                break;
+                            }
+                            default:
+                                in_account = false;
+                                break;
+                        }
+                    }
+                } else {
+                    std::cout << "Error: Account not found.\n";
+                }
+                break;
+            }
+
+            case 3:
+            {
+                istar_bank.show_all_accounts();
+                std::cout << "Total Bank Assets: " << istar_bank.get_total_assets() << " EUR\n";
+                break;
+            }
+
+            default:
+            {
+                app_running = false;
+                break;
             }
         }
     }
-    std::cout << "Thank you for banking with us.\n";
-        
-    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // Clear buffer
-    std::cin.get();
 
+    std::cout << "Banking System shutting down...\n";
     return 0;
 }
