@@ -31,5 +31,8 @@
 *.out
 *.app
 
+#Data
+*.csv
+
 # VS Code Settings (Personal preference, don't share)
 .vscode/
