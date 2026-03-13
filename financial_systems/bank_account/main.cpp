@@ -25,6 +25,7 @@ void show_action_menu() {
 
 int main() {
     Bank istar_bank;
+    istar_bank.load_database();
     std::cout << "System initialized. Ready for customers.\n";
 
     bool app_running = true;
@@ -127,5 +128,8 @@ int main() {
     }
 
     std::cout << "Banking System shutting down...\n";
+
+    istar_bank.save_database();
+
     return 0;
 }

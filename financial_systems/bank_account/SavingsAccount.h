@@ -10,6 +10,7 @@ class SavingsAccount : public BankAccount {
         SavingsAccount(std::string name, std::string acc_num, double initial_deposit, double rate);
 
         bool withdraw(double amount) override; //Replacing parent's logic
+        std::string get_type() const override { return "savings"; }
         void display_info() const override;
         void apply_interest();
 };

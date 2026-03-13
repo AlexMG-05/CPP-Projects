@@ -5,6 +5,7 @@
 #include <memory>
 #include <string>
 #include "Account.h"
+#include <fstream>
 
 
 class Bank {
@@ -16,6 +17,8 @@ class Bank {
         //1. Core management
         void add_account(std::string name, std::string acc_num, double initial_dep, std::string type);
         void close_account(std::string acc_num);
+        void save_database() const;
+        void load_database();
 
         //2. Reporting
         void show_all_accounts() const;
